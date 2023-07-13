@@ -1,17 +1,35 @@
 pipeline {
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
+
     agent any
+
+    tools {
+        maven 'maven-3.8.8'
+    }
+
     stages {
-        stage('Example') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                submitter "alice,bob"
-                parameters {
-                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                }
-            }
+        stage('Code Compilation') {
             steps {
-                echo "Hello, ${PERSON}, nice to meet you."
+                echo 'code compilation is starting'
+                sh 'mvn clean compile'
+				echo 'code compilation is completed'
+            }
+        }
+        stage('Code Test') {
+            steps {
+                echo 'code testing is starting'
+                sh 'mvn clean test'
+				echo 'code testing is completed'
+            }
+        }
+        stage('Code Package') {
+            steps {
+                echo 'code packing is starting'
+                sh 'mvn clean package'
+				echo 'code packing is completed'
             }
         }
     }
