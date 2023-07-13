@@ -4,11 +4,11 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
     }
 
-    agent any tools {
-                     maven 'apache-maven-3.8.8'
-                 }
+    agent any
 
-
+    tools {
+           maven 'apache-maven-3.0.1'
+           }
 
     stages {
         stage('Code Compilation') {
